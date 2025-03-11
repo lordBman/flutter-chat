@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:my_chat_app/utils/constants.dart';
+import 'package:flutter_chat/pages/splash_page.dart';
+import 'package:flutter_chat/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:my_chat_app/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Supabase.initialize(
-    // TODO: Replace credentials with your own
-    url: 'SUPABASE_URL',
-    anonKey: 'SUPABASE_ANON_KEY',
+    url: 'https://pxzlubzyvgnffgvayymo.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB4emx1Ynp5dmduZmZndmF5eW1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE2ODk1ODMsImV4cCI6MjA1NzI2NTU4M30.Q26uVLbQPPlWp8CLdjKkY19XvVnbEwzl3YIpMWHA8rg',
   );
   runApp(const MyApp());
 }

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/models/message.dart';
+import 'package:flutter_chat/models/profile.dart';
+import 'package:flutter_chat/utils/constants.dart';
 
-import 'package:my_chat_app/models/message.dart';
-import 'package:my_chat_app/models/profile.dart';
-import 'package:my_chat_app/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart';
 
