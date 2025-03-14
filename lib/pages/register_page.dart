@@ -5,18 +5,10 @@ import 'package:flutter_chat/utils/constants.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key, required this.isRegistering}) : super(key: key);
+    const RegisterPage({  super.key});
 
-  static Route<void> route({bool isRegistering = false}) {
-    return MaterialPageRoute(
-      builder: (context) => RegisterPage(isRegistering: isRegistering),
-    );
-  }
-
-  final bool isRegistering;
-
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
+    @override
+    State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/components/loading.dart';
 import 'package:flutter_chat/models/message.dart';
 import 'package:flutter_chat/models/profile.dart';
 import 'package:flutter_chat/utils/constants.dart';
@@ -12,16 +13,10 @@ import 'package:timeago/timeago.dart';
 ///
 /// Displays chat bubbles as a ListView and TextField to enter new chat.
 class ChatPage extends StatefulWidget {
-  const ChatPage({Key? key}) : super(key: key);
+    const ChatPage({ super.key });
 
-  static Route<void> route() {
-    return MaterialPageRoute(
-      builder: (context) => const ChatPage(),
-    );
-  }
-
-  @override
-  State<ChatPage> createState() => _ChatPageState();
+    @override
+    State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
@@ -60,7 +55,10 @@ class _ChatPageState extends State<ChatPage> {
       body: StreamBuilder<List<Message>>(
         stream: _messagesStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if(snapshot.hasData){
+              return Loading();
+          }
+          
             final messages = snapshot.data!;
             return Column(
               children: [
@@ -90,9 +88,6 @@ class _ChatPageState extends State<ChatPage> {
                 const _MessageBar(),
               ],
             );
-          } else {
-            return preloader;
-          }
         },
       ),
     );
@@ -194,7 +189,7 @@ class _ChatBubble extends StatelessWidget {
       if (!message.isMine)
         CircleAvatar(
           child: profile == null
-              ? preloader
+              ? Loading()
               : Text(profile!.username.substring(0, 2)),
         ),
       const SizedBox(width: 12),

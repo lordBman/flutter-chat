@@ -1,79 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat/pages/chat_page.dart';
+import 'package:flutter_chat/notifiers/users.dart';
 import 'package:flutter_chat/utils/constants.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  static Route<void> route() {
-    return MaterialPageRoute(builder: (context) => const LoginPage());
-  }
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
+    const LoginPage({ super.key });
+    
+    @override
+    State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _isLoading = false;
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
 
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await supabase.auth.signInWithPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      Navigator.of(context)
-          .pushAndRemoveUntil(ChatPage.route(), (route) => false);
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (_) {
-      context.showErrorSnackBar(message: unexpectedErrorMessage);
+    late UsersNotifier __usersNotifier;
+    
+    void __signIn(){
+        __usersNotifier.login(email: _emailController.text, password: _passwordController.text,done: (){
+            if(__usersNotifier.state.isError){
+                context.showErrorSnackBar(message: __usersNotifier.state.error!);
+            }else{
+                Navigator.pushReplacementNamed(context, "home");
+            }
+        });
     }
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-      });
+
+    @override
+    void dispose() {
+        _emailController.dispose();
+        _passwordController.dispose();
+        super.dispose();
     }
-  }
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
-      body: ListView(
-        padding: formPadding,
-        children: [
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          formSpacer,
-          TextFormField(
-            controller: _passwordController,
-            decoration: const InputDecoration(labelText: 'Password'),
-            obscureText: true,
-          ),
-          formSpacer,
-          ElevatedButton(
-            onPressed: _isLoading ? null : _signIn,
-            child: const Text('Login'),
-          ),
-        ],
-      ),
-    );
-  }
+    @override
+    Widget build(BuildContext context) {
+        __usersNotifier = context.watch<UsersNotifier>();
+        
+        return Scaffold(
+            appBar: AppBar(title: const Text('Sign In')),
+            body: Padding(padding: formPadding,
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                        TextFormField(
+                            controller: _emailController,
+                            decoration: const InputDecoration(labelText: 'Email'),
+                            keyboardType: TextInputType.emailAddress),
+                        formSpacer,
+                        TextFormField(
+                            controller: _passwordController,
+                            decoration: const InputDecoration(labelText: 'Password'),
+                            obscureText: true),
+                        formSpacer,
+                        ElevatedButton(
+                            onPressed: __usersNotifier.state.loading ? null : __signIn,
+                            child: const Text('Login')),
+                    ],
+                ),
+            ),
+        );
+    }
 }
